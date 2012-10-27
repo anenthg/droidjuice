@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentTop="true"
+    android:orientation="vertical"
+    android:padding="20sp" >
+ 
+    
+    <RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content">
+      
+        <TextView
+        android:id="@+id/syncOnOffLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Background Sync"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:textColor="#379418"
+        android:layout_alignParentLeft="true"  
+        android:layout_marginTop="10sp"/>
+
+      
+
+        <ImageView
+        android:id="@+id/syncImageView"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/sync_image_on" />
+     
+        
+    </RelativeLayout>
+
+</LinearLayout>

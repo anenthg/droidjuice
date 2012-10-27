@@ -1,0 +1,77 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentTop="true"
+    android:orientation="vertical"
+    android:padding="20sp" >
+
+    <TextView
+        android:id="@+id/userNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:text="Droid Juice Handle"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:textColor="#379418" />
+
+    <TextView
+        android:id="@+id/userNameHintLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:text="Claim you Twitter handle now :)"
+        android:textColor="#8A8A8A" />
+
+    <EditText
+        android:id="@+id/userNameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:ems="10" 
+        android:maxLength="15">
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/userMobileLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:text="Mobile Number"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:textColor="#379418" />
+
+    <TextView
+        android:id="@+id/userMobileHintLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:text="Your number is pretty safe with us!"
+        android:textColor="#8A8A8A" />
+
+    <EditText
+        android:id="@+id/userMobileText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:ems="10"
+        android:inputType="phone"
+        android:maxLength="10" >
+    </EditText>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80sp" >
+
+        <Button
+            android:id="@+id/registerButton"
+            style="@style/GreenButtonText"
+            android:background="@drawable/green_button"
+            android:text="Done" >
+        </Button>
+    </LinearLayout>
+
+</LinearLayout>

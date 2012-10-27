@@ -6,27 +6,35 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="15" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
         <activity
-            android:name=".IntroActivity"
-            android:label="@string/title_activity_intro" 
-            android:launchMode="singleTop">
+            android:name=".RegistrationActivity"
+            android:label="Droid Juice">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings" 
+            android:launchMode="singleTop">
+        </activity>
+        
         <!-- 
         <receiver android:name="com.droidhack.droidjuice.BatteryWatcherService">
         </receiver> -->
         
-        <service android:name="com.droidhack.droidjuice.AlarmService_Service" android:process=":remote" />
-        <service android:name="com.droidhack.droidjuice.LocalService" />
+<!--         <service android:name="com.droidhack.droidjuice.AlarmService_Service" android:process=":remote" />
+ -->        <service android:name="com.droidhack.droidjuice.LocalService" />
         
     </application>
 
