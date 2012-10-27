@@ -4,5 +4,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_intro">IntroActivity</string>
+    <string name="alarm_service_started">ALARM_STARTED</string>
+    <string name="alarm_service_finished">ALARM_FINISHED</string>
+    <string name="local_service_label">I am the local service label</string>
 
 </resources>

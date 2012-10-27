@@ -13,13 +13,21 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".IntroActivity"
-            android:label="@string/title_activity_intro" >
+            android:label="@string/title_activity_intro" 
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- 
+        <receiver android:name="com.droidhack.droidjuice.BatteryWatcherService">
+        </receiver> -->
+        
+        <service android:name="com.droidhack.droidjuice.AlarmService_Service" android:process=":remote" />
+        <service android:name="com.droidhack.droidjuice.LocalService" />
+        
     </application>
 
 </manifest>
