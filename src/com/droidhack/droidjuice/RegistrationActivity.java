@@ -38,9 +38,10 @@ public class RegistrationActivity extends Activity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         appSettings = getSharedPreferences("DroidJuiceAppPref", MODE_PRIVATE);
-        prefEditor = appSettings.edit();
+       
         
         HelperMethods.log("Username: "+appSettings.getString("user_name", ""));
+        HelperMethods.log("Time: "+System.currentTimeMillis());
         
         if(appSettings.getString("user_name", "").equals(""))
         {
@@ -79,6 +80,11 @@ public class RegistrationActivity extends Activity{
     					
     					SendDataToServer sendData=new SendDataToServer();
     					sendData.execute(new String[] {serverData.toString()});
+    					
+    					 prefEditor = appSettings.edit();
+    		 	         prefEditor.putString("twitter_name", user_name);
+    		 	            
+    		 	         prefEditor.commit();
     					
     				}
     			}
@@ -182,7 +188,9 @@ public class RegistrationActivity extends Activity{
  	            //HelperMethods.log("Data sent: Success");
  	            Toast.makeText(getApplicationContext(), "Profile Created", Toast.LENGTH_SHORT).show();
  	            
+ 	            prefEditor = appSettings.edit();
  	            prefEditor.putString("user_name", responseStatus);
+ 	            
  	            prefEditor.commit();
  	            
  	            Intent settingsPageIntent=new Intent(getApplicationContext(), SettingsActivity.class);

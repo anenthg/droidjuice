@@ -5,21 +5,20 @@
     android:layout_alignParentTop="true"
     android:orientation="vertical"
     android:padding="20sp" >
- 
-    
-    <RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content">
-      
-        <TextView
-        android:id="@+id/syncOnOffLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Background Sync"
-        android:textAppearance="@android:style/TextAppearance.Large"
-        android:textColor="#379418"
-        android:layout_alignParentLeft="true"  
-        android:layout_marginTop="10sp"/>
 
-      
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/syncOnOffLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10sp"
+            android:text="Background Sync"
+            android:textAppearance="@android:style/TextAppearance.Large"
+            android:textColor="#379418" />
 
         <ImageView
         android:id="@+id/syncImageView"
@@ -32,4 +31,61 @@
         
     </RelativeLayout>
 
+    
+     <TextView
+            android:id="@+id/pingFreqLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:text="Ping Frequency"
+            android:textAppearance="@android:style/TextAppearance.Large"
+            android:textColor="#379418" />
+    
+    <RadioGroup
+        android:layout_marginTop="10sp"
+        android:id="@+id/pingFrequencyRadio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp" >
+
+        <RadioButton
+            android:id="@+id/radio0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="15 Minutes" />
+
+        <RadioButton
+            android:id="@+id/radio1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30 Minutes" />
+
+        <RadioButton
+            android:id="@+id/radio2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="60 Minutes" />
+    </RadioGroup>
+
+      <TextView
+            android:id="@+id/profileLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:text="Your Droid Juice profile page"
+            android:textAppearance="@android:style/TextAppearance.Large"
+            android:textColor="#379418" />
+      
+      <Button
+            android:id="@+id/profileButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:text="http://droidjuice.me"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:textColor="#379418" 
+            android:layout_marginLeft="20sp"/>
+     
+    
 </LinearLayout>

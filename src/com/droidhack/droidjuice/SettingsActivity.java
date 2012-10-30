@@ -1,5 +1,6 @@
 package com.droidhack.droidjuice;
    
+import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -15,15 +16,19 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class SettingsActivity extends Activity {
 	
 	
-	private int LOCAL_CACHING_INTERVAL_MINUTES=1;
+	private int LOCAL_CACHING_INTERVAL_MINUTES=15;
 	 
 	private Button battery_button,start_service_button,stop_service_button;
 	//private BatteryWatcherService batteryService;
@@ -32,19 +37,85 @@ public class SettingsActivity extends Activity {
     private PendingIntent mAlarmSender;
     SharedPreferences appSettings;
     SharedPreferences.Editor prefEditor;
-
-	 
+    RadioGroup pingFreqRadio;
+    Button profileButton;
 	  
 	  
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        
-        syncImageView=(ImageView)findViewById(R.id.syncImageView);
-
         appSettings = getSharedPreferences("DroidJuiceAppPref", MODE_PRIVATE);
-        prefEditor = appSettings.edit();
+
+        syncImageView=(ImageView)findViewById(R.id.syncImageView);
+        pingFreqRadio=(RadioGroup)findViewById(R.id.pingFrequencyRadio);
+        profileButton=(Button)findViewById(R.id.profileButton);
+        profileButton.setText("http://droidjuice.me/?"+appSettings.getString("twitter_name", ""));
+        
+        profileButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String url = profileButton.getText().toString();
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(url));
+				startActivity(i);
+			}
+		});
+        
+        
+        
+        
+        LOCAL_CACHING_INTERVAL_MINUTES=appSettings.getInt("ping_freq", 15);
+ 
+//        pingFreqRadio.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View arg0) {
+//				 Toast.makeText(getApplicationContext(), text, duration)
+//			}
+//		});
+        pingFreqRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(RadioGroup arg0, int arg1) {
+				
+				
+				
+				if(arg1==R.id.radio0)
+				{
+					Toast.makeText(getApplicationContext(), "Ping interval is set to 15 Mins", Toast.LENGTH_SHORT).show();
+					LOCAL_CACHING_INTERVAL_MINUTES=15;					
+			         
+				}
+				else if(arg1==R.id.radio1)
+				{
+					Toast.makeText(getApplicationContext(), "Ping interval is set to 30 Mins", Toast.LENGTH_SHORT).show();
+					LOCAL_CACHING_INTERVAL_MINUTES=30;
+
+				}
+				else if(arg1==R.id.radio2)
+				{
+					Toast.makeText(getApplicationContext(), "Ping interval is set to 60 Mins", Toast.LENGTH_SHORT).show();
+					LOCAL_CACHING_INTERVAL_MINUTES=60;
+
+				}
+				
+				if(appSettings.getBoolean("sync_status", true)==true)
+		        {
+					stopWatchmanService();
+		        	startWatchmanService();
+		        }
+				prefEditor = appSettings.edit();
+				prefEditor.putInt("ping_freq", LOCAL_CACHING_INTERVAL_MINUTES);
+				prefEditor.commit();
+				
+			
+			
+			}
+		});
+        
+        
         
         if(appSettings.getBoolean("sync_status", true)==true)
         {
@@ -73,6 +144,7 @@ public class SettingsActivity extends Activity {
 			public void onClick(View arg0) {
 				 if(appSettings.getBoolean("sync_status", false)==true)
 				 {
+					 prefEditor = appSettings.edit();
 					 prefEditor.putBoolean("sync_status", false);
 					 prefEditor.commit();
 					 
@@ -83,6 +155,7 @@ public class SettingsActivity extends Activity {
 				 }
 				 else
 				 {
+					 prefEditor = appSettings.edit();
 					 prefEditor.putBoolean("sync_status", true);
 					 prefEditor.commit();
 					 

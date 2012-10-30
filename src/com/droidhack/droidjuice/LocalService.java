@@ -27,8 +27,10 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+ 
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -39,6 +41,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Binder;
@@ -60,11 +63,18 @@ import android.widget.Toast;
 
 public class LocalService extends Service {
    //private NotificationManager mNM;
+    SharedPreferences appSettings;
+
     
     
     private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
+    	
+    	
+    	
 		@Override
-		public void onReceive(Context arg0, Intent intent) {
+		public void onReceive(Context context, Intent intent) {
+	          appSettings = context.getSharedPreferences("DroidJuiceAppPref", MODE_PRIVATE);
+ 
 		      int level = intent.getIntExtra("level", 0);
 		      
 		      int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
@@ -76,15 +86,42 @@ public class LocalService extends Service {
 		      
 		      HelperMethods.log(displayMessage);
 		      
+		      int yes_no_status=isCharging?1:0;
+		      
 		      JSONObject singleBatteryInfo=new JSONObject();
 		      
+		      try {
+					singleBatteryInfo.put("timestamp", ""+System.currentTimeMillis());
+					singleBatteryInfo.put("battery_level", ""+level);
+					singleBatteryInfo.put("charging_yn", ""+yes_no_status);
+					
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		      JSONArray dummyArray=new JSONArray();
+		      dummyArray.put(singleBatteryInfo);
 		      
+		      JSONObject serverObject=new JSONObject();
+		      try {
+					serverObject.put("user_id", appSettings.getString("user_name", "0"));
+					serverObject.put("snapshots", dummyArray);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		      
+		      
+		      HelperMethods.log("Data to Server: \n"+serverObject.toString());
+		      
+		      SendBatteryDataToServer sendData=new SendBatteryDataToServer();
+				sendData.execute(new String[] {serverObject.toString()});
 		      
 		     // Toast.makeText(getApplicationContext(), displayMessage, Toast.LENGTH_SHORT).show();
 		      
 		      
 		      
-		      unBindBroadcastService();
+		     
 		       
 		}
 	  };
@@ -171,33 +208,33 @@ public class LocalService extends Service {
     
     
     
-	private class SendBatteryDataToServer extends AsyncTask<String, Void, String> {
+	private class SendBatteryDataToServer extends AsyncTask<String, Void, Boolean> {
 
         @Override
         protected void onPreExecute() {
         }
 
         @Override
-        protected String doInBackground(String... arg0) {
+        protected Boolean doInBackground(String... arg0) {
             
         	
-        	 String requestURL = "http://droidjuice.me/api.php?q=create_user&data="+URLEncoder.encode(arg0[0]);
+        	 String requestURL = "http://droidjuice.me/api.php?q=record_battery&data="+URLEncoder.encode(arg0[0]);
              
         	 HelperMethods.log("Final URL: "+requestURL);
-//             HttpClient httpclient = new DefaultHttpClient();
-//             HttpResponse response;
-//
-//             try {
-//                 response = httpclient.execute(new HttpGet(requestURL));
-//                 StatusLine statusLine = response.getStatusLine();
-//                 if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
-//                     ByteArrayOutputStream out = new ByteArrayOutputStream();
-//                     response.getEntity().writeTo(out);
-//                     out.close();
-//                     String responseString = out.toString().trim();
-//                     
-//                     HelperMethods.log("RESPONSE: " + responseString);
-//                     
+             HttpClient httpclient = new DefaultHttpClient();
+             HttpResponse response;
+
+             try {
+                 response = httpclient.execute(new HttpGet(requestURL));
+                 StatusLine statusLine = response.getStatusLine();
+                 if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
+                     ByteArrayOutputStream out = new ByteArrayOutputStream();
+                     response.getEntity().writeTo(out);
+                     out.close();
+                     String responseString = out.toString().trim();
+                     
+                     HelperMethods.log("RESPONSE: " + responseString);
+                     
 //                     JSONObject responseJSON=null;
 // 					 String responseStatus=null;
 // 					 //String responseUserID=null;
@@ -216,28 +253,28 @@ public class LocalService extends Service {
 //					
 //						return responseStatus;
 //                    
-//                   
-//
-//                 } else {
-//                     response.getEntity().getContent().close();
-//
-//                     HelperMethods.log("Data : Exception1");
-//                 }
-//             } catch (ClientProtocolException e) {
-//            	 HelperMethods.log("Data : Exception2 "+e.getMessage());
-//             } catch (IOException e) {
-//            	 HelperMethods.log("Data : Exception3 "+e.getMessage());
-//             }  
+                   
+
+                 } else {
+                     response.getEntity().getContent().close();
+
+                     HelperMethods.log("Data : Exception1");
+                 }
+             } catch (ClientProtocolException e) {
+            	 HelperMethods.log("Data : Exception2 "+e.getMessage());
+             } catch (IOException e) {
+            	 HelperMethods.log("Data : Exception3 "+e.getMessage());
+             }  
         	
         	
-            return null;
+            return false;
         }
 
         @Override
-        protected void onPostExecute(String responseStatus) {
+        protected void onPostExecute(Boolean responseStatus) {
             super.onPostExecute(responseStatus);
               
-           
+            unBindBroadcastService();
 //             if(responseStatus.equals("-1"))
 //             {
 // 	           // HelperMethods.log("Twitter ID Taken");
